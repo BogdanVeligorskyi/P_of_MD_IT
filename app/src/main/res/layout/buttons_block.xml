@@ -8,7 +8,9 @@
             android:id="@+id/circle_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:minWidth="10dp"
             android:maxWidth="140dp"
             android:text="Circle image">
@@ -17,7 +19,9 @@
             android:id="@+id/crop_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:text="Crop image">
         </Button>
 
@@ -28,14 +32,18 @@
             android:id="@+id/blur_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:text="Blur image">
         </Button>
         <Button
             android:id="@+id/resize_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
             android:text="Resize image">
         </Button>
     </TableRow>

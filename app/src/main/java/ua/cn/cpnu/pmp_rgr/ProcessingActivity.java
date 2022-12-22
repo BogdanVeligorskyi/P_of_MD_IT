@@ -2,7 +2,6 @@ package ua.cn.cpnu.pmp_rgr;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -44,8 +43,8 @@ public class ProcessingActivity extends AppCompatActivity {
             //iv.setBackgroundColor(000000);
         }
 
-        Button bBack = (Button) findViewById(R.id.back);
-        bBack.setOnClickListener((View.OnClickListener) view -> {
+        Button bBack = findViewById(R.id.back);
+        bBack.setOnClickListener(view -> {
             finish();
         }
 
