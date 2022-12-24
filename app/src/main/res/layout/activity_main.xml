@@ -7,6 +7,7 @@
     android:background="#333333"
     tools:context=".MainActivity">
     <Spinner
+        android:contentDescription="Directories"
         android:layout_gravity="center_horizontal"
         android:id="@+id/spinner"
         android:layout_marginTop="10dp"
@@ -19,12 +20,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_margin="25dp"
+            android:layout_margin="10dp"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/image_content"
-            android:minHeight="380dp"
+            android:minHeight="480dp"
             android:contentDescription="TODO">
         </ImageView>
     </ViewSwitcher>

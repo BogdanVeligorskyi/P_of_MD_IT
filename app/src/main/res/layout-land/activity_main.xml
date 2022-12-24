@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333333"
+    android:id="@+id/activity_main_land"
+    tools:context=".MainActivity">
+
+    <ViewSwitcher
+        android:id="@+id/view_switcher"
+        android:layout_below="@id/spinner"
+        android:layout_width="460dp"
+        android:layout_height="280dp">
+        <ImageView
+            android:id="@+id/image_content"
+            android:layout_height="match_parent"
+            android:layout_width="460dp"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:contentDescription="TODO">
+        </ImageView>
+    </ViewSwitcher>
+
+    <TextView
+        android:id="@+id/name_of_file"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/view_switcher"
+        android:textColor="@color/white"
+        android:text="Filename.jpg"
+        android:layout_width="460dp"
+        android:layout_height="wrap_content">
+    </TextView>
+
+
+
+    <include layout="@layout/buttons_block"/>
+
+
+</RelativeLayout>

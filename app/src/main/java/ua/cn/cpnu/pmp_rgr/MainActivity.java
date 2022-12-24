@@ -3,14 +3,15 @@ package ua.cn.cpnu.pmp_rgr;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,11 +28,17 @@ public class MainActivity extends AppCompatActivity {
     private final Activity activity = MainActivity.this;
     private ImageView iv;
     private TextView tv;
+    private final String absPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private Button bCrop;
+    private Button bCircle;
+    private Button bResize;
+    private Button bBlur;
 
-    private final String[] nameArray = {"/storage/emulated/0/Pictures",
-    "/storage/emulated/0/DCIM/Camera",
-            "/storage/emulated/0/DCIM/Screenshots"};
-    private Spinner spinner;
+    private final String[] nameArray = {
+            absPath + "/Pictures",
+            absPath + "/DCIM/Camera",
+            absPath + "/DCIM/Screenshots"
+            };
     private String path = nameArray[0];
     private String[] uriArr;
 
@@ -40,30 +47,73 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner = findViewById(R.id.spinner);
         setupSpinner();
-
         uriArr = readAllImages();
-        ViewSwitcher vs = findViewById(R.id.view_switcher);
+        setupViewSwitcher();
+        setupImage();
+        loadPhoto();
+        setupButtons();
 
+    }
+
+    // disable or enable buttons
+    private void areEnabledButtons(boolean flag) {
+        if (bCrop != null && bResize != null && bBlur != null && bCircle != null) {
+            bCrop.setEnabled(flag);
+            bResize.setEnabled(flag);
+            bBlur.setEnabled(flag);
+            bCircle.setEnabled(flag);
+        }
+    }
+
+    // setup TextView and ImageView
+    private void setupImage() {
         iv = findViewById(R.id.image_content);
-
         tv = findViewById(R.id.name_of_file);
-        int lastIndex = uriArr[current_photo].lastIndexOf("/");
-        tv.setText(uriArr[current_photo].substring(lastIndex+1));
+    }
 
-        /*Animation inAnim = new AlphaAnimation(0, 1);
-        inAnim.setDuration(2000);
-        Animation outAnim = new AlphaAnimation(1, 0);
-        outAnim.setDuration(2000);
+    // setup buttons
+    private void setupButtons() {
+        bCrop = findViewById(R.id.crop_image);
+        bCrop.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,
+                    ProcessingActivity.class);
+            intent.putExtra("URL", uriArr[current_photo]);
+            intent.putExtra("Action", bCrop.getText());
+            startActivity(intent);
+        });
 
-        vs.setInAnimation(inAnim);
-        vs.setOutAnimation(outAnim);*/
+        bCircle = findViewById(R.id.circle_image);
+        bCircle.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,
+                    ProcessingActivity.class);
+            intent.putExtra("URL", uriArr[current_photo]);
+            intent.putExtra("Action", bCircle.getText());
+            startActivity(intent);
+        });
 
-        GlideApp.with(this)
-                .load(uriArr[current_photo])
-                .into(iv);
+        bResize = findViewById(R.id.resize_image);
+        bResize.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,
+                    ProcessingActivity.class);
+            intent.putExtra("URL", uriArr[current_photo]);
+            intent.putExtra("Action", bResize.getText());
+            startActivity(intent);
+        });
 
+        bBlur = findViewById(R.id.blur_image);
+        bBlur.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this,
+                    ProcessingActivity.class);
+            intent.putExtra("URL", uriArr[current_photo]);
+            intent.putExtra("Action", bBlur.getText());
+            startActivity(intent);
+        });
+    }
+
+    // setup slider possibility
+    private void setupViewSwitcher() {
+        ViewSwitcher vs = findViewById(R.id.view_switcher);
         vs.setOnTouchListener(new OnSwipeTouchListener(activity) {
             @Override
             public void onSwipeLeft() {
@@ -75,49 +125,45 @@ public class MainActivity extends AppCompatActivity {
                 prevPhoto(uriArr);
             }
         });
+    }
 
-        Button bCrop = findViewById(R.id.crop_image);
-        bCrop.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ProcessingActivity.class);
-            intent.putExtra("URL", uriArr[current_photo]);
-            intent.putExtra("Action", bCrop.getText());
-            startActivity(intent);
-        });
+    // load photo into ImageView component
+    private void loadPhoto() {
+        int lastIndex = uriArr[current_photo].lastIndexOf("/");
+        tv.setText(uriArr[current_photo].substring(lastIndex+1));
+        tv.setTextColor(Color.WHITE);
 
-        Button bCircle = findViewById(R.id.circle_image);
-        bCircle.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ProcessingActivity.class);
-            intent.putExtra("URL", uriArr[current_photo]);
-            intent.putExtra("Action", bCircle.getText());
-            startActivity(intent);
-        });
-
-        Button bResize = findViewById(R.id.resize_image);
-        bResize.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ProcessingActivity.class);
-            intent.putExtra("URL", uriArr[current_photo]);
-            intent.putExtra("Action", bResize.getText());
-            startActivity(intent);
-        });
-
-        Button bBlur = findViewById(R.id.blur_image);
-        bBlur.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, ProcessingActivity.class);
-            intent.putExtra("URL", uriArr[current_photo]);
-            intent.putExtra("Action", bBlur.getText());
-            startActivity(intent);
-        });
-
+        GlideApp.with(activity)
+                .load(uriArr[current_photo])
+                .into(iv);
+        areEnabledButtons(true);
     }
 
     // read all photos from directory
     private String[] readAllImages() {
+        /*Uri contentUri = ContentUris.withAppendedId(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                cursor.getLong(Integer.parseInt(BaseColumns._ID)));
+        String fileOpenMode = "r";
+        ParcelFileDescriptor parcelFd = resolver.openFileDescriptor(uri, fileOpenMode);
+        if (parcelFd != null) {
+            int fd = parcelFd.detachFd();
+            // Pass the integer value "fd" into your native code. Remember to call
+            // close(2) on the file descriptor when you're done using it.
+        }*/
         // check for permission
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        if (ActivityCompat.checkSelfPermission(
+                MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
 
-        Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+        boolean isExternalStorageReadable = android.os.Environment.getExternalStorageState()
+                .equals(Environment.MEDIA_MOUNTED_READ_ONLY);
+        Log.d("ExternalStorageReadable", Boolean.toString(isExternalStorageReadable));
 
         /*final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
@@ -136,25 +182,25 @@ public class MainActivity extends AppCompatActivity {
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             //Store the path of the image
             arrPath[i]= cursor.getString(dataColumnIndex);
-            Log.d("", arrPath[i]);
+            Log.d("arrPath", arrPath[i]);
         }
         // The cursor should be freed up after use with close()
-        cursor.close();*/
+        cursor.close();
+        return arrPath;*/
 
-        //String path = "/storage/emulated/0/Pictures";
+        //path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
+        //String[] str = Environment.getExternalStorageDirectory().getAbsolutePath()
+
         Log.d("Files", "Path: " + path);
         File directory = new File(path);
-
         File[] files = directory.listFiles(file -> file.getPath().endsWith(".jpg") ||
                 file.getPath().endsWith(".png") ||
                 file.getPath().endsWith(".jpeg"));
 
         if (files == null) {
-            tv.setText("No images in this directory!");
-            tv.setTextColor(255);
             return null;
         }
-        assert files != null;
+
         Log.d("Files", "Size: "+ files.length);
         String[] imagesArr = new String[files.length];
         for (int i = 0; i < files.length; i++) {
@@ -170,11 +216,7 @@ public class MainActivity extends AppCompatActivity {
         if (current_photo >= arr.length) {
             current_photo = 0;
         }
-        GlideApp.with(activity)
-                .load(arr[current_photo])
-                .into(iv);
-        int lastIndex = arr[current_photo].lastIndexOf("/");
-        tv.setText(arr[current_photo].substring(lastIndex+1));
+        loadPhoto();
     }
 
     // to previous photo
@@ -183,15 +225,12 @@ public class MainActivity extends AppCompatActivity {
         if (current_photo < 0) {
             current_photo = arr.length-1;
         }
-        GlideApp.with(activity)
-                .load(arr[current_photo])
-                .into(iv);
-        int lastIndex = arr[current_photo].lastIndexOf("/");
-        tv.setText(arr[current_photo].substring(lastIndex+1));
+        loadPhoto();
     }
 
     // setup spinner with number of questions
     private void setupSpinner() {
+        Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter adapter = new ArrayAdapter(
                 this,
                 R.layout.listview_row,
@@ -205,17 +244,24 @@ public class MainActivity extends AppCompatActivity {
         assert spinner != null;
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-            // if number of questions was selected
+            // if directory from expanded list was chosen
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(getApplicationContext(), nameArray[position], Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), nameArray[position],
+                        Toast.LENGTH_LONG).show();
                 path = nameArray[position];
                 uriArr = readAllImages();
                 current_photo = 0;
+                assert uriArr != null;
                 if (uriArr.length > 0) {
-                    GlideApp.with(activity)
-                            .load(uriArr[current_photo])
-                            .into(iv);
+                    loadPhoto();
+                } else {
+                    tv.setText("No images in this directory!");
+                    tv.setTextColor(Color.RED);
+                    Toast.makeText(getApplicationContext(), "No images in this directory!",
+                            Toast.LENGTH_LONG).show();
+                    areEnabledButtons(false);
                 }
             }
 

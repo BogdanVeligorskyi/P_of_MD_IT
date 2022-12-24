@@ -13,14 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_margin="25dp"
         android:id="@+id/image_content_processed"
-        android:minHeight="400dp"
+        android:minHeight="200dp"
         android:contentDescription="TODO">
     </ImageView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="120dp">
-    </View>
 
     <Button
         android:layout_gravity="bottom"
