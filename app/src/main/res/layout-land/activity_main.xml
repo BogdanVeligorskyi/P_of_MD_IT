@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main_land"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#333333"
-    android:id="@+id/activity_main_land"
+    android:background="@color/dark_gray"
     tools:context=".MainActivity">
 
     <ViewSwitcher
         android:id="@+id/view_switcher"
-        android:layout_below="@id/spinner"
-        android:layout_width="460dp"
-        android:layout_height="280dp">
+        android:layout_width="@dimen/activityMainComponentsWidth"
+        android:layout_height="@dimen/activityMainComponentsHeight"
+        android:layout_below="@id/spinner">
         <ImageView
             android:id="@+id/image_content"
             android:layout_height="match_parent"
-            android:layout_width="460dp"
-            android:layout_margin="10dp"
+            android:layout_width="@dimen/activityMainComponentsWidth"
+            android:layout_margin="@dimen/activityMainMargin"
             android:gravity="center_horizontal"
-            android:contentDescription="TODO">
+            android:contentDescription="@string/image_view_description">
         </ImageView>
     </ViewSwitcher>
 
     <TextView
         android:id="@+id/name_of_file"
-        android:gravity="center_horizontal"
+        android:layout_width="@dimen/activityMainComponentsWidth"
+        android:layout_height="wrap_content"
         android:layout_below="@id/view_switcher"
+        android:gravity="center_horizontal"
         android:textColor="@color/white"
-        android:text="Filename.jpg"
-        android:layout_width="460dp"
-        android:layout_height="wrap_content">
+        android:text="@string/text_view_file_name">
     </TextView>
 
-
-
     <include layout="@layout/buttons_block"/>
-
 
 </RelativeLayout>

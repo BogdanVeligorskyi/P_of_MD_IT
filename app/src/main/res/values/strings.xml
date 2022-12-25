@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Images Viewer</string>
+    <string name="spinner_description">Directories</string>
+    <string name="image_view_description">Place for image</string>
+    <string name="text_view_file_name">Filename.jpg</string>
+    <string name="listview_text">Simple text</string>
+    <string name="button_circle_image">Circle image</string>
+    <string name="button_crop_image">Crop image</string>
+    <string name="button_blur_image">Blur image</string>
+    <string name="button_resize_image">Resize image</string>
 </resources>

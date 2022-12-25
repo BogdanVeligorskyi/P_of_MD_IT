@@ -1,5 +1,6 @@
 package ua.cn.cpnu.pmp_rgr;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import android.Manifest;
@@ -22,24 +23,29 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 import java.io.File;
 
+// main activity class, where current image is shown
 public class MainActivity extends AppCompatActivity {
 
-    private int current_photo = 0;
     private final Activity activity = MainActivity.this;
-    private ImageView iv;
-    private TextView tv;
-    private final String absPath = Environment.getExternalStorageDirectory().getAbsolutePath();
     private Button bCrop;
     private Button bCircle;
     private Button bResize;
     private Button bBlur;
+    private ImageView iv;
+    private TextView tv;
+    private final String absPath = Environment.
+            getExternalStorageDirectory().getAbsolutePath();
+    private int current_photo;
+    public boolean isOrientationChanged;
 
+    // all directories where images may be located
     private final String[] nameArray = {
             absPath + "/Pictures",
             absPath + "/DCIM/Camera",
             absPath + "/DCIM/Screenshots"
             };
-    private String path = nameArray[0];
+    // path to images directory and array of images
+    private String path;
     private String[] uriArr;
 
     @Override
@@ -47,18 +53,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // if activity is started for the first time
+        if (savedInstanceState != null) {
+            current_photo = savedInstanceState.getInt("CURRENT_PHOTO");
+            path = savedInstanceState.getString("PATH");
+            isOrientationChanged = true;
+
+            // if activity is resumed
+        } else {
+            current_photo = 0;
+            isOrientationChanged = false;
+            path = nameArray[0];
+        }
         setupSpinner();
         uriArr = readAllImages();
         setupViewSwitcher();
         setupImage();
-        loadPhoto();
+        loadPhoto(current_photo);
         setupButtons();
 
     }
 
     // disable or enable buttons
     private void areEnabledButtons(boolean flag) {
-        if (bCrop != null && bResize != null && bBlur != null && bCircle != null) {
+        if (bCrop != null && bResize != null &&
+                bBlur != null && bCircle != null) {
             bCrop.setEnabled(flag);
             bResize.setEnabled(flag);
             bBlur.setEnabled(flag);
@@ -111,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // setup slider possibility
+    // setup slider opportunity
     private void setupViewSwitcher() {
         ViewSwitcher vs = findViewById(R.id.view_switcher);
         vs.setOnTouchListener(new OnSwipeTouchListener(activity) {
@@ -128,11 +147,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // load photo into ImageView component
-    private void loadPhoto() {
+    private void loadPhoto(int current_photo) {
         int lastIndex = uriArr[current_photo].lastIndexOf("/");
         tv.setText(uriArr[current_photo].substring(lastIndex+1));
         tv.setTextColor(Color.WHITE);
-
         GlideApp.with(activity)
                 .load(uriArr[current_photo])
                 .into(iv);
@@ -141,16 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     // read all photos from directory
     private String[] readAllImages() {
-        /*Uri contentUri = ContentUris.withAppendedId(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                cursor.getLong(Integer.parseInt(BaseColumns._ID)));
-        String fileOpenMode = "r";
-        ParcelFileDescriptor parcelFd = resolver.openFileDescriptor(uri, fileOpenMode);
-        if (parcelFd != null) {
-            int fd = parcelFd.detachFd();
-            // Pass the integer value "fd" into your native code. Remember to call
-            // close(2) on the file descriptor when you're done using it.
-        }*/
+
         // check for permission
         if (ActivityCompat.checkSelfPermission(
                 MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -161,39 +170,10 @@ public class MainActivity extends AppCompatActivity {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
 
-        boolean isExternalStorageReadable = android.os.Environment.getExternalStorageState()
-                .equals(Environment.MEDIA_MOUNTED_READ_ONLY);
-        Log.d("ExternalStorageReadable", Boolean.toString(isExternalStorageReadable));
-
-        /*final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
-        final String orderBy = MediaStore.Images.Media._ID;
-        //Stores all the images from the gallery in Cursor
-        Cursor cursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
-                null, orderBy);
-        //Total number of images
-        int count = cursor.getCount();
-
-        //Create an array to store path to all the images
-        String[] arrPath = new String[count];
-
-        for (int i = 0; i < count; i++) {
-            cursor.moveToPosition(i);
-            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            //Store the path of the image
-            arrPath[i]= cursor.getString(dataColumnIndex);
-            Log.d("arrPath", arrPath[i]);
-        }
-        // The cursor should be freed up after use with close()
-        cursor.close();
-        return arrPath;*/
-
-        //path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
-        //String[] str = Environment.getExternalStorageDirectory().getAbsolutePath()
-
-        Log.d("Files", "Path: " + path);
+        // find images among other files
         File directory = new File(path);
-        File[] files = directory.listFiles(file -> file.getPath().endsWith(".jpg") ||
+        File[] files = directory.listFiles(file ->
+                file.getPath().endsWith(".jpg") ||
                 file.getPath().endsWith(".png") ||
                 file.getPath().endsWith(".jpeg"));
 
@@ -201,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
+        // load images
         Log.d("Files", "Size: "+ files.length);
         String[] imagesArr = new String[files.length];
         for (int i = 0; i < files.length; i++) {
-            Log.d("Files", "FileName:" + files[i].getName());
             imagesArr[i] = path + "/" + files[i].getName();
         }
         return imagesArr;
@@ -216,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         if (current_photo >= arr.length) {
             current_photo = 0;
         }
-        loadPhoto();
+        loadPhoto(current_photo);
     }
 
     // to previous photo
@@ -225,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         if (current_photo < 0) {
             current_photo = arr.length-1;
         }
-        loadPhoto();
+        loadPhoto(current_photo);
     }
 
     // setup spinner with number of questions
@@ -241,28 +221,33 @@ public class MainActivity extends AppCompatActivity {
         if (spinner != null) {
             spinner.setAdapter(adapter);
         }
-        assert spinner != null;
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             // if directory from expanded list was chosen
             @SuppressLint("SetTextI18n")
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemSelected(AdapterView<?> adapterView,
+                                       View view, int position, long l) {
                 Toast.makeText(getApplicationContext(), nameArray[position],
                         Toast.LENGTH_LONG).show();
                 path = nameArray[position];
-                uriArr = readAllImages();
-                current_photo = 0;
-                assert uriArr != null;
+                if (!isOrientationChanged) {
+                    Log.d("state changed", "no");
+                    uriArr = readAllImages();
+                    current_photo = 0;
+                }
                 if (uriArr.length > 0) {
-                    loadPhoto();
+                    loadPhoto(current_photo);
                 } else {
                     tv.setText("No images in this directory!");
                     tv.setTextColor(Color.RED);
-                    Toast.makeText(getApplicationContext(), "No images in this directory!",
+                    Toast.makeText(getApplicationContext(),
+                            "No images in this directory!",
                             Toast.LENGTH_LONG).show();
                     areEnabledButtons(false);
                 }
+                isOrientationChanged = false;
             }
 
             @Override
@@ -270,7 +255,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
     }
 
+    // saving current state
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("CURRENT_PHOTO", current_photo);
+        outState.putString("PATH", path);
+    }
 
 }

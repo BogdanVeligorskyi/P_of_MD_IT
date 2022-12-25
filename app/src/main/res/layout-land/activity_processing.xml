@@ -4,25 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#333333"
+    android:background="@color/dark_gray"
     tools:context=".MainActivity">
 
     <ImageView
-        android:layout_gravity="center"
+        android:id="@+id/image_content_processed"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_margin="25dp"
-        android:id="@+id/image_content_processed"
-        android:minHeight="200dp"
-        android:contentDescription="TODO">
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/activityProcessingMargin"
+        android:minHeight="@dimen/activityProcessingImageViewMinHeightLand"
+        android:contentDescription="@string/image_view_description">
     </ImageView>
-
-    <Button
-        android:layout_gravity="bottom"
-        android:id="@+id/back"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:text="Back">
-    </Button>
 
 </LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activityMainMargin">10dp</dimen>
+    <dimen name="activityMainImageViewMinHeight">480dp</dimen>
+    <dimen name="activityMainComponentsWidth">460dp</dimen>
+    <dimen name="activityMainComponentsHeight">280dp</dimen>
+    <dimen name="activityProcessingMargin">25dp</dimen>
+    <dimen name="activityProcessingImageViewMinHeight">400dp</dimen>
+    <dimen name="activityProcessingImageViewMinHeightLand">200dp</dimen>
+
+    <dimen name="listviewPadding">10dp</dimen>
+    <dimen name="buttonsBlockMarginLeftRight">25dp</dimen>
+    <dimen name="buttonsBlockMarginTopBottom">10dp</dimen>
+    <dimen name="buttonsBlockWidth">190dp</dimen>
+    <dimen name="buttonsBlockMargin10dp">10dp</dimen>
+    <dimen name="buttonsBlockMargin5dp">5dp</dimen>
+</resources>

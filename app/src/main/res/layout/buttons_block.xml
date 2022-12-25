@@ -8,23 +8,20 @@
             android:id="@+id/circle_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:minWidth="10dp"
-            android:maxWidth="140dp"
-            android:text="Circle image">
+            android:layout_marginLeft="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginRight="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginTop="@dimen/buttonsBlockMarginTopBottom"
+            android:text="@string/button_circle_image">
         </Button>
         <Button
             android:id="@+id/crop_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:text="Crop image">
+            android:layout_marginLeft="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginRight="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginTop="@dimen/buttonsBlockMarginTopBottom"
+            android:text="@string/button_crop_image">
         </Button>
-
     </TableRow>
 
     <TableRow android:gravity="center_horizontal">
@@ -32,19 +29,19 @@
             android:id="@+id/blur_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:text="Blur image">
+            android:layout_marginLeft="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginRight="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginTop="@dimen/buttonsBlockMarginTopBottom"
+            android:text="@string/button_blur_image">
         </Button>
         <Button
             android:id="@+id/resize_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:text="Resize image">
+            android:layout_marginLeft="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginRight="@dimen/buttonsBlockMarginLeftRight"
+            android:layout_marginTop="@dimen/buttonsBlockMarginTopBottom"
+            android:text="@string/button_resize_image">
         </Button>
     </TableRow>
 

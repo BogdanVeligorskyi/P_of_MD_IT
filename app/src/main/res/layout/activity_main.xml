@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#333333"
+    android:background="@color/dark_gray"
     tools:context=".MainActivity">
+
     <Spinner
-        android:contentDescription="Directories"
-        android:layout_gravity="center_horizontal"
         android:id="@+id/spinner"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activityMainMargin"
+        android:contentDescription="@string/spinner_description">
     </Spinner>
 
     <ViewSwitcher
@@ -20,25 +21,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
+            android:id="@+id/image_content"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/image_content"
-            android:minHeight="480dp"
-            android:contentDescription="TODO">
+            android:layout_margin="@dimen/activityMainMargin"
+            android:layout_gravity="center"
+            android:minHeight="@dimen/activityMainImageViewMinHeight"
+            android:contentDescription="@string/image_view_description">
         </ImageView>
     </ViewSwitcher>
 
     <TextView
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:text="Filename.jpg"
         android:id="@+id/name_of_file"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="@string/text_view_file_name">
     </TextView>
-    <include layout="@layout/buttons_block"/>
 
+    <include layout="@layout/buttons_block"/>
 
 </LinearLayout>
