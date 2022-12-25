@@ -4,24 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#333333"
+    android:background="@color/dark_gray"
     tools:context=".MainActivity">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activityMainMargin"
+        android:contentDescription="@string/spinner_description">
+    </Spinner>
 
     <ViewSwitcher
         android:id="@+id/view_switcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_margin="25dp"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:id="@+id/image_content"
-            android:minHeight="380dp"
-            android:contentDescription="TODO">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/activityMainMargin"
+            android:layout_gravity="center"
+            android:minHeight="@dimen/activityMainImageViewMinHeight"
+            android:contentDescription="@string/image_view_description">
         </ImageView>
     </ViewSwitcher>
-    <include layout="@layout/buttons_block"/>
 
+    <TextView
+        android:id="@+id/name_of_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="@string/text_view_file_name">
+    </TextView>
+
+    <include layout="@layout/buttons_block"/>
 
 </LinearLayout>

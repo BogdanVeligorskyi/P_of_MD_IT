@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/activityProcessingMargin"
-        android:minHeight="@dimen/activityProcessingImageViewMinHeight"
+        android:minHeight="@dimen/activityProcessingImageViewMinHeightLand"
         android:contentDescription="@string/image_view_description">
     </ImageView>
 
